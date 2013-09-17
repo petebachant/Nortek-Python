@@ -17,7 +17,6 @@ import serial
 from serial.tools import list_ports
 
 import win32com.client as wc
-import comtypes
 
 import matplotlib.pyplot as plt
 import numpy as np

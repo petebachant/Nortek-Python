@@ -9,13 +9,16 @@ import pdcommpy.pdcommpy as pd
 import time
 import matplotlib.pyplot as plt
 import numpy as np
+import pythoncom
+
 
 u = []
 v = []
 w = []
 
-events = pd.EventHandler()
-velocity = events.velocity
+#events = pd.EventHandler()
+#events.u = 0
+#velocity = events.velocity
 
 pd.set_serial_port("COM2")
 pd.set_start_on_synch(False)
@@ -26,14 +29,14 @@ pd.connect()
 connected = False
 
 while not connected:
-    connected = pd.isconnected()
+    connected = pd.is_connected()
     print "Connecting..."
     time.sleep(0.5)    
 print "Connected!"
 
 pd.set_config()
 pd.stop()
-pd.start_disk_recording("test", False)
+pd.start_disk_recording("test/test", False)
 pd.start()
 state = pd.inquire_state()
 
@@ -47,7 +50,7 @@ t0 = time.time()
 t = 0
 
 while t < 20:
-    print velocity
+    print pd.data
     i += 1
     t = time.time() - t0
     time.sleep(0.3)
