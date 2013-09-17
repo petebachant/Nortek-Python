@@ -1,0 +1,115 @@
+[C:\Users\Pete\Documents\School\Research\Python\Nortek System Integration\PyQt\test.vno]
+---------------------------------------------------------------------
+Number of measurements                0
+Number of checksum errors             0
+Time of first measurement             12:00:00 AM
+Time of last measurement              12:00:00 AM
+
+User setup
+---------------------------------------------------------------------
+Sampling rate                         25 Hz
+Nominal velocity range                0.30 m/s
+Probe type                            STANDARD
+Transmit length                       0.6 mm
+Sampling volume                       5.8 mm
+Output sync                           VECTRINO
+Output sync                           MASTER
+Analog output                         DISABLED
+Velocity scaling                      0.1 mm
+Powerlevel                            LOW+
+Coordinate system                     XYZ
+Sound speed                           MEASURED
+Salinity                              35.0 ppt
+Number of beams                       4
+Software version                      0.01
+System1                               2
+System2                               50
+System3                               7
+System4                               445
+System5                               512
+System9                               1154
+System10                              96
+System11                              0
+System12                              0
+System13                              0
+System14                              1
+System16                              1
+System17                              7
+System22                              10800
+System28                              1
+System29                              1
+System30                              20
+System31                              15618 15646 15673 15699
+System32                              5357
+System33                              32768
+System34                              16384
+System35                              30583
+System36                              15292
+System37                              7646
+System38                              140
+System39                              300
+System40                              0
+System41                              0
+System42                              2796
+System43                              0
+System44                              6
+System45                              2
+System46                              4839
+System47                              32768
+System48                              16384
+System49                              31744
+System50                              15872
+System51                              7936
+System52                              155
+System53                              320
+System39                              200 200 200 200
+Start command                         None
+CRC download                          Unknown
+
+Hardware configuration
+---------------------------------------------------------------------
+Serial number                         VNO 1046
+Internal code version                 0
+Hardware revision                     E
+Hardware revision                     E
+Firmware version                      1.31 PLUS
+
+Head configuration
+---------------------------------------------------------------------
+System 1                              0
+Head frequency                        10000 kHz
+Serial number                         VCN 8355
+Transformation matrix                 1.9849 0.0000 -1.9780 0.0000
+                                      0.0000 1.9956 0.0000 -1.9883
+                                      0.5039 0.0000 0.5293 0.0000
+                                      0.0000 0.5027 0.0000 0.5300
+Number of beams                       4
+System5                               0 0 0 0
+System7                               0 2168 0 0
+                                      2059 0 2171 0
+System8                               0 0 0
+                                      0 0 0
+                                      0 0 0
+System9                               0 0 0
+                                      0 0 0
+                                      0 0 0
+System10                              0 0 0 0
+System11                              0 0 0 0
+System13                              1481 259 7128 10861
+System14                              0 0 0 0
+                                      0 0 0 0
+System15                              0 0 0 0
+                                      0 0 0 0
+                                      0 0 0 0
+                                      0 0 0 0
+System16                              0 0 0 0
+System17                              0
+System18                              0
+System19                              0
+System20                              10000
+
+Velocity header
+---------------------------------------------------------------------
+*** not found ***
+
+Data file format
