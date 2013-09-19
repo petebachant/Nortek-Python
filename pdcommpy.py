@@ -63,8 +63,8 @@ def list_serial_ports():
 
 
 class PdControl(object):
-    """A PdComm control object. When data is being acquired Numpy arrays
-    are being created in memory."""
+    """A PdComm control object. When data is being acquired, Numpy arrays
+    are being appended to in memory."""
     def __init__(self):
         self.pdx = _wc.DispatchWithEvents('PdCommATL.PdCommX.1', self.PdEvents)
         
@@ -172,13 +172,14 @@ class PdControl(object):
         elif coordsys == "Beam":
             ncs = 2
         else:
-            nsc = coordsys
+            ncs = coordsys
         self.pdx.CoordinateSystem = ncs
     
     def set_config(self):
         """Writes the configuration (properties) to the instrument.
-        Note that for most of the property settings to take effect, the SETCONFIG
-        method must be called prior to Start command. See also CONNECT."""
+        Note that for most of the property settings to take effect, the 
+        SETCONFIG method must be called prior to Start command. See also 
+        CONNECT."""
         self.pdx.SetConfig()    
     
     def start(self, brecorder=False):
