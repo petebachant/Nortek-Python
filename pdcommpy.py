@@ -87,11 +87,16 @@ class PdControl(object):
                          "v" : np.array([]),
                          "w" : np.array([]),
                          "w2" : np.array([]),
-                         "snr_u" : np.array([])}
+                         "snr_u" : np.array([]),
+                         "corr_u" : np.array([]),
+                         "corr_v" : np.array([]),
+                         "corr_w" : np.array([])}
             self.u = 0.0
             self.v = 0.0
             self.w = 0.0
         def append_data(self):
+            """Append data to arrays in dict. It seems that the first 3 samples
+            should be thrown away to match output of *.vno files."""
             self.data["u"] = np.append(self.data["u"], self.u)
             self.data["v"] = np.append(self.data["v"], self.v)
             self.data["w"] = np.append(self.data["w"], self.w)
@@ -99,7 +104,8 @@ class PdControl(object):
             self.data["corr_v"] = np.append(self.data["corr_v"], self.corr_v)
 #            self.data["w2"] = np.append(self.data["w2"], self.w2)
 #            self.data["snr_u"] = np.append(self.data["snr_u"], self.snr_u)
-            self.data["t"] = np.arange(len(self.data["u"]))/self.SamplingRate
+            self.data["t"] = np.arange(len(self.data["u"]), dtype=float)\
+            /float(self.SamplingRate)
         def OnNewData(self, hType=1):
 #            self.snr = self.GetSNR(1)
             self.u = self.GetVel(1,1)
@@ -113,7 +119,7 @@ class PdControl(object):
             self.corr_u = self.GetCorr(1,1)
             self.corr_v = self.GetCorr(1,2)
             self.corr_w = self.GetCorr(1,3)
-            self.corr_w2 = self.GetCorr(1,4)
+#            self.corr_w2 = self.GetCorr(1,4)
             self.append_data()
             
     def connect(self):
