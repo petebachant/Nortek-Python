@@ -231,9 +231,13 @@ class PdControl(object):
         """Gets the most recent velocity data as a variant type array."""
         return self.pdx.GetVarVelocity
         
-    def get_vel_range(self):
-        """Returns instrument velocity range."""
-        return self.pdx.VelRange
+    def get_vel_range(self, instrument="Vectrino", as_float=True):
+        """Returns instrument velocity range. If as_float, velocity range
+        is returned as an instrument dependent float with units (m/s)."""
+        if as_float:
+            return velranges[instrument][self.pdx.VelRange]
+        else:
+            return self.pdx.VelRange
         
     def get_snr(self, cell, other):
         """Gets the most recent SNR data for the specified cell number."""
