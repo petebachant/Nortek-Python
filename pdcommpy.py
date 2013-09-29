@@ -70,8 +70,6 @@ class PdControl(object):
         
         # Set data associated with callback functions
         self.data = self.pdx.data
-        self.u = self.pdx.u
-        self.v = self.pdx.v
         
         # Set connected and state variables
         self.is_connected()
@@ -88,12 +86,12 @@ class PdControl(object):
                          "w" : np.array([]),
                          "w2" : np.array([]),
                          "snr_u" : np.array([]),
+                         "snr_v" : np.array([]),
+                         "snr_w" : np.array([]),
                          "corr_u" : np.array([]),
                          "corr_v" : np.array([]),
                          "corr_w" : np.array([])}
-            self.u = 0.0
-            self.v = 0.0
-            self.w = 0.0
+            self.sample = 0
         def append_data(self):
             """Append data to arrays in dict. It seems that the first 3 samples
             should be thrown away to match output of *.vno files."""
@@ -102,25 +100,29 @@ class PdControl(object):
             self.data["w"] = np.append(self.data["w"], self.w)
             self.data["corr_u"] = np.append(self.data["corr_u"], self.corr_u)
             self.data["corr_v"] = np.append(self.data["corr_v"], self.corr_v)
-#            self.data["w2"] = np.append(self.data["w2"], self.w2)
-#            self.data["snr_u"] = np.append(self.data["snr_u"], self.snr_u)
+            self.data["corr_w"] = np.append(self.data["corr_v"], self.corr_w)
+            self.data["snr_u"] = np.append(self.data["snr_u"], self.snr_u)
+            self.data["snr_v"] = np.append(self.data["snr_u"], self.snr_v)
+            self.data["snr_w"] = np.append(self.data["snr_u"], self.snr_w)
             self.data["t"] = np.arange(len(self.data["u"]), dtype=float)\
             /float(self.SamplingRate)
         def OnNewData(self, hType=1):
-#            self.snr = self.GetSNR(1)
+            self.sample += 1
             self.u = self.GetVel(1,1)
             self.v = self.GetVel(1,2)
             self.w = self.GetVel(1,3)
 #            self.w2 = self.GetVel(2,3)
-#            self.snr_u = self.snr[0]
-#            self.snr_v = self.snr[1]
-#            self.snr_w = self.snr[3]
+            self.snr_u = self.GetSNR(1,1)
+            self.snr_v = self.GetSNR(1,2)
+            self.snr_w = self.GetSNR(1,3)
 #            self.snr_w2 = self.snr[4]
             self.corr_u = self.GetCorr(1,1)
             self.corr_v = self.GetCorr(1,2)
             self.corr_w = self.GetCorr(1,3)
 #            self.corr_w2 = self.GetCorr(1,4)
-            self.append_data()
+            # Only append data from the 4th sample onward
+            if self.sample >= 3:
+                self.append_data()
             
     def connect(self):
         """Connects to the instrument and checks its status."""
@@ -245,7 +247,7 @@ class PdControl(object):
         else:
             return self.pdx.VelRange
         
-    def get_snr(self, cell, other):
+    def get_snr(self, cell, other=1):
         """Gets the most recent SNR data for the specified cell number."""
         return self.pdx.GetSNR(cell, other)
         
