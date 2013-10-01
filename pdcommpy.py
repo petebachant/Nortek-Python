@@ -121,7 +121,7 @@ class PdControl(object):
             self.corr_w = self.GetCorr(1,3)
 #            self.corr_w2 = self.GetCorr(1,4)
             # Only append data from the 4th sample onward
-            if self.sample >= 3:
+            if self.sample >= 4:
                 self.append_data()
             
     def connect(self):
