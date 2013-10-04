@@ -5,18 +5,17 @@ Created on Mon Aug 12 22:59:01 2013
 @author: Pete
 """
 from __future__ import division
-from pdcommpy.pdcommpy import PdControl
+from pdcommpy import PdControl
 import time
 import matplotlib.pyplot as plt
 import numpy as np
-
 
 vec = PdControl()
 
 vec.set_serial_port("COM2")
 vec.set_start_on_synch(False)
 vec.set_synch_master(True)
-vec.set_sampling_rate(20)
+vec.set_sample_rate(20)
 vec.set_vel_range(2)
 vec.connect()
 connected = False

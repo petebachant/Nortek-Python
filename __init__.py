@@ -6,5 +6,5 @@ pdcommpy
 A module wrapping the Nortek pdCommATL library
 
 """
-import pdcommpy
-from pdcommpy import *
+from . import pdcommpy
+from .pdcommpy import *
