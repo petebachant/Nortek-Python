@@ -8,11 +8,10 @@ setup(
     version='0.0.1',
     author='Pete Bachant',
     author_email='petebachant@gmail.com',
-    packages=['pdcommpy'],
+    modules=['pdcommpy'],
     scripts=[],
     url='https://github.com/petebachant/pdcommpy.git',
     license='LICENSE',
     description='Package for working with Nortek instruments.',
-    long_description=open('README.md').read(),
-    install_requires=[]
+    long_description=open('README.md').read()
 )
