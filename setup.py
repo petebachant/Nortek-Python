@@ -10,7 +10,7 @@ setup(
     author_email='petebachant@gmail.com',
     modules=['pdcommpy'],
     scripts=[],
-    url='https://github.com/petebachant/pdcommpy.git',
+    url='https://github.com/petebachant/PdCommPy.git',
     license='LICENSE',
     description='Package for working with Nortek instruments.',
     long_description=open('README.md').read()
