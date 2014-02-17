@@ -3,6 +3,10 @@
 Created on Mon Aug 12 17:16:04 2013
 
 @author: Pete
+
+To-do:
+  * Alphabetize functions
+
 """
 import win32com.client as _wc
 import numpy as np
@@ -39,7 +43,6 @@ velranges = {"Vector" : {0 : 7.0,
                            4 : 0.1,
                            5 : 0.03}}
 
-
 def list_serial_ports():
     """List serial ports on current machine."""
     import os
@@ -70,12 +73,11 @@ class PdControl(object):
         
         # Set data associated with callback functions
         self.data = self.pdx.data
-        
         # Set connected and state variables
         self.is_connected()
         self.inquire_state()
-        
-        self.sample_rate = self.pdx.SamplingRate
+        # Set default instrument as Vectrino
+        self.pdx.DefaultInstrument = 6
 
     class PdEvents(object):
         """OnNewData event handler."""
@@ -161,15 +163,47 @@ class PdControl(object):
         """Set sample rate in Hz"""
         self.pdx.SamplingRate = rate
         self.sample_rate = self.pdx.SamplingRate
+        
+    def set_transmit_length(self, index=3):
+        """Sets transmit length."""
+        self.pdx.TransmitLength = index
+        
+    def set_sampling_volume(self, index=3):
+        """Sets sampling volume."""
+        self.pdx.SamplingVolume = index
+        
+    def set_salinity(self, value=0.0):
+        """Sets salinity in ppt."""
+        self.pdx.Salinity = value
+        
+    def set_power_level(self, index=0):
+        """Sets the power level according to the index.
+        0 = High
+        1 = HighLow
+        2 = LowHigh
+        3 = Low"""
+        self.pdx.PowerLevel = index
     
     def is_connected(self):
         """Returns a bool indicating connection status."""
         self.connected = bool(self.pdx.IsConnected())
         return self.connected
     
-    def set_vel_range(self, velrange):
-        """Sets instrument velocity range."""
-        self.pdx.VelRange = int(velrange)
+    def set_vel_range(self, index):
+        """Sets instrument velocity range. Takes an integer index as
+        an argument.
+        Nominal velocity range should be set to cover the range of the
+        velocities anticipated during the deployment. A higher velocity
+        range give more noise in the data and vice versa. See the
+        User Guide for more information.
+        Values are:
+            Vector
+            0 = 7.0 m/s, 1 = 4.0 m/s, 2 = 2.0 m/s, 3 = 1.0 m/s, 4 = 0.3 m/s,
+            5 = 0.1 m/s, 6 = 0.01 m/s
+            Vectrino
+            0 = 4.0 m/s, 1 = 2.5 m/s, 2 = 1.0 m/s, 3 = 0.3 m/s, 4 = 0.1 m/s,
+            5 = 0.03 m/s"""
+        self.pdx.VelRange = index
         
     def set_coordinate_system(self, coordsys):
         """Sets instrument coordinate system. Accepts an int or string."""
@@ -246,19 +280,56 @@ class PdControl(object):
             return velranges[instrument][self.pdx.VelRange]
         else:
             return self.pdx.VelRange
+            
+    def get_power_level(self, as_string=True):
+        """Returns the instrument's power level as a string by default
+        optionally as integer index."""
+        pl = self.pdx.PowerLevel
+        if as_string:
+            if pl == 0:
+                return "High"
+            elif pl == 1:
+                return "HighLow"
+            elif pl == 2:
+                return "LowHigh"
+            elif pl == 3: 
+                return "Low"
+        else: return pl
         
     def get_snr(self, cell, other=1):
         """Gets the most recent SNR data for the specified cell number."""
         return self.pdx.GetSNR(cell, other)
         
+    def get_salinity(self):
+        """Returns salinity value in ppt."""
+        return self.pdx.Salinity
+        
     def get_sampling_volume_value(self, nSVIndex, nTLIndex):
         """Returns the Sampling Volume corresponding to the Sampling Volume and 
         Transmit Length indices."""
-        return self.pdx.GetSamplingVolumeValue(nSVIndex, nTLIndex)
+        return self.pdx.SamplingVolumeValue(nSVIndex, nTLIndex)
         
-    def get_sampling_volume(self):
+    def get_sampling_volume(self, as_float=True):
         """Returns the device samping volume."""
-        return self.pdx.GetSamplingVolume()
+        svi = self.pdx.SamplingVolume
+        tli = self.pdx.TransmitLength
+        if as_float:
+            return self.get_sampling_volume_value(svi, tli)
+        else:
+            return svi
+        
+    def get_transmit_length(self, as_float=True):
+        """Returns the device transmit length."""
+        tli = self.pdx.TransmitLength
+        if as_float:
+            return self.get_transmit_length_value(tli)
+        else:
+            return tli
+        
+    def get_transmit_length_value(self, index):
+        """Returns the transmit length value corresponding to the given
+        index."""
+        return self.pdx.TransmitLengthValue(index)
     
     def get_clock(self):
         """Returns the current date and time of the RTC in the instrument."""
@@ -291,7 +362,7 @@ class PdControl(object):
         return self.pdx.GetHorizontalVelPrec()
         
     def get_coordinate_system(self):
-        """Returns the device coordinate system."""
+        """Returns the device coordinate system as a string."""
         csys = self.pdx.CoordinateSystem
         if csys == 0:
             return "ENU"
@@ -322,8 +393,10 @@ class PdControl(object):
     
 
 if __name__ == "__main__":
-    pdcontrol = PdControl()
-    pdcontrol.set_serial_port("COM2")
-    print pdcontrol.inquire_state()
-    pdcontrol.set_sample_rate(200)
-    print pdcontrol.get_coordinate_system()
+    vec = PdControl()
+    vec.set_transmit_length(3)
+    vec.set_sampling_volume(3)
+    print vec.get_transmit_length()
+    print vec.get_sampling_volume()
+    vec.set_vel_range(0.5)
+    print vec.get_vel_range()
