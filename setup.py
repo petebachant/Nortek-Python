@@ -8,7 +8,7 @@ setup(
     version='0.0.1',
     author='Pete Bachant',
     author_email='petebachant@gmail.com',
-    modules=['pdcommpy'],
+    py_modules=['pdcommpy'],
     scripts=[],
     url='https://github.com/petebachant/PdCommPy.git',
     license='LICENSE',
