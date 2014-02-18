@@ -45,7 +45,7 @@ t0 = time.time()
 t = 0
 
 while t < 10:
-    print vec.get_snr(1,1)
+    print "Signal to noise ratio (dB):", vec.get_snr(1,1)
     i += 1
     t = time.time() - t0
     time.sleep(0.5)
