@@ -13,18 +13,19 @@ from mainwindow import *
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
-from pdcommpy.pdcommpy import PdControl, list_serial_ports
+from pdcommpy import PdControl, list_serial_ports
 
 pd = PdControl()
 
 # Set up a thread for the connection process
 class ConThread(QThread):
+    finished = QtCore.pyqtSignal()
     def __init__(self):
         QThread.__init__(self)
-        finished = QtCore.pyqtSignal()        
+        self.isconnected = pd.is_connected()
     def run(self):
         pd.connect()
-        self.isconnected = pdcommx.IsConnected()
+        self.isconnected = pd.is_connected()
         self.finished.emit()
         
 
@@ -108,9 +109,9 @@ class MainWindow(QtGui.QMainWindow):
         
     def on_start(self):
         if self.isconnected == True:
-            pd.Stop()
+            pd.stop()
             pd.set_config()
-            pd.start_disk_recording("test")
+            pd.start_disk_recording("test/test")
             pd.start()
         
     def on_stop(self):
@@ -138,8 +139,11 @@ class MainWindow(QtGui.QMainWindow):
     def on_timer(self):
         st = pd.inquire_state()
         self.st_label.setText(st + " ")
-        vel = pd.get_var_velocity() 
-        self.vel_label.setText("Velocity: " + str(vel[0]) + " ")
+        try:
+            vel = pd.data["u"][-1]
+        except IndexError:
+            vel = "N/A"
+        self.vel_label.setText("u (m/s): " + str(vel) + " ")
 
     def closeEvent(self, event):
         if self.isconnected == True:
