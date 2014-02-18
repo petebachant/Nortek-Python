@@ -1,3 +1,4 @@
 *.pyc
 *.aqd
 *.vno
+build/lib/pdcommpy.py
