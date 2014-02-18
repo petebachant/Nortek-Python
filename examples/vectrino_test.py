@@ -12,11 +12,15 @@ import numpy as np
 
 vec = PdControl()
 
-vec.set_serial_port("COM2")
+vec.set_serial_port("COM8")
 vec.set_start_on_synch(False)
 vec.set_synch_master(True)
 vec.set_sample_rate(20)
 vec.set_vel_range(2)
+vec.set_transmit_length(3)
+vec.set_sampling_volume(3)
+vec.set_salinity(0.0)
+vec.set_power_level(0)
 vec.connect()
 connected = False
 
