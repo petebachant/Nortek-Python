@@ -15,11 +15,12 @@ Usage
 =====
 
 ```python
-from pdcommpy import PdControl
-
-pdcontrol = PdControl()
-pdcontrol.serial_port = "COM2"
-print pdcontrol.state
-pdcontrol.sample_rate = 200
-print pdcontrol.coordinate_system
+>>> from pdcommpy import PdControl
+>>> pdcontrol = PdControl()
+>>> pdcontrol.serial_port = "COM2"
+>>> pdcontrol.state
+Not connected
+>>> pdcontrol.sample_rate = 200
+>>> pdcontrol.coordinate_system
+'ENU'
 ```
