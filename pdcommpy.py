@@ -183,17 +183,49 @@ class PdControl(object):
     def transmit_length(self):
         return self.pdx.TransmitLength
     @transmit_length.setter
-    def transmit_length(self, index=3):
+    def transmit_length(self, val=3):
         """Sets transmit length."""
-        self.pdx.TransmitLength = index
+        if self.instrument == "Vectrino" and type(val) is float:
+            if val == 0.3:
+                self.pdx.TransmitLength = 0
+            elif val == 0.6:
+                self.pdx.TransmitLength = 1
+            elif val == 1.2:
+                self.pdx.TransmitLength = 2
+            elif val == 1.8:
+                self.pdx.TransmitLength = 3
+            elif val == 2.4:
+                self.pdx.TransmitLength = 4
+            else:
+                raise ValueError("Invalid transmit length specified")
+        elif val in range(5):
+            self.pdx.TransmitLength = val
+        else:
+            raise ValueError("Invalid transmit length specified")
         
     @property
     def sampling_volume(self):
         return self.pdx.SamplingVolume
     @sampling_volume.setter
-    def sampling_volume(self, index=3):
+    def sampling_volume(self, val):
         """Sets sampling volume."""
-        self.pdx.SamplingVolume = index
+        if self.instrument == "Vectrino" and type(val) is float:
+            if val == 2.5:
+                self.pdx.SamplingVolume = 0
+            elif val == 4.0:
+                self.pdx.SamplingVolume = 1
+            elif val == 5.5:
+                self.pdx.SamplingVolume = 2
+            elif val == 7.0:
+                self.pdx.SamplingVolume = 3
+            elif val == 8.5:
+                self.pdx.SamplingVolume = 4
+            else:
+                raise ValueError("Invalid sampling volume specified")
+        elif val in range(5):
+            self.pdx.SamplingVolume = val
+        else:
+            raise ValueError("Invalid sampling volume specified")
         
     @property
     def salinity(self):
@@ -420,11 +452,11 @@ class PdControl(object):
 def main():
     vec = PdControl()
     vec.sample_rate = 200
-    vec.transmit_length = 4
-    print vec.pdx.TransmitLength
-    print vec.pdx.SamplingRate
-    vec.power_level = "HIGH"
-    print vec.last_error_message
+    vec.transmit_length = 1.8
+    vec.sampling_volume = 7.0
+    print vec.instrument
+    print vec.transmit_length_value
+    print vec.sampling_volume_value
     vec.coordinate_system = "xyz"
     print vec.coordinate_system
     
