@@ -273,14 +273,16 @@ class PdControl(object):
     @coordinate_system.setter
     def coordinate_system(self, coordsys):
         """Sets instrument coordinate system. Accepts an int or string."""
-        if coordsys == "ENU":
+        if coordsys.upper() == "ENU":
             ncs = 0
-        elif coordsys == "XYZ":
+        elif coordsys.upper() == "XYZ":
             ncs = 1
-        elif coordsys == "Beam":
+        elif coordsys.upper() == "BEAM":
             ncs = 2
-        else:
+        elif coordsys in [0, 1, 2]:
             ncs = coordsys
+        else:
+            raise ValueError("Invalid coordinate system selection")
         self.pdx.CoordinateSystem = ncs
     
     def set_config(self):
@@ -423,6 +425,8 @@ def main():
     print vec.pdx.SamplingRate
     vec.power_level = "HIGH"
     print vec.last_error_message
+    vec.coordinate_system = "xyz"
+    print vec.coordinate_system
     
 if __name__ == "__main__":
     main()
