@@ -73,9 +73,7 @@ class PdControl(object):
         
         # Set data associated with callback functions
         self.data = self.pdx.data
-        # Set connected and state variables
-        self.is_connected()
-        self.inquire_state()
+
         # Set default instrument as Vectrino
         self.pdx.DefaultInstrument = 6
 
@@ -130,66 +128,124 @@ class PdControl(object):
         """Connects to the instrument and checks its status."""
         self.pdx.Connect()
         
-    def set_serial_port(self, port):
-        """Sets serial port (input as a string)."""
+    @property
+    def serial_port(self):
+        return str(self.pdx.SerialPort)
+    @serial_port.setter
+    def serial_port(self, port):
+        """Sets serial port."""
         self.pdx.SerialPort = port
     
-    def get_serial_port(self):
-        """Get current serial port."""
-        return str(self.pdx.SerialPort)
-    
-    def get_firmware_version(self):
+    @property
+    def firmware_version(self):
         """Returns the firmware version. Must be called after connect(), which 
         reads the hardware and software configuration from the instrument."""
         return self.pdx.GetFirmwareVersion()
     
-    def get_head_serialno(self):
+    @property
+    def head_serialno(self):
         """Returns the head serial number."""
         return self.pdx.GetHeadSerialNo()
     
-    def set_start_on_synch(self, choice):
+    @property
+    def start_on_sync(self):
+        return bool(self.pdx.StartOnSynch)
+    @start_on_sync.setter
+    def start_on_sync(self, choice):
         self.pdx.StartOnSynch = int(choice)
-        
-    def set_sample_on_synch(self, choice):
+    
+    @property
+    def sample_on_sync(self):
+        return bool(self.pdx.SampleOnSynch)
+    @sample_on_sync.setter
+    def sample_on_sync(self, choice):
         """Sets sample on synch parameter, meaning device will sample at each
         pulse received."""
         self.pdx.SampleOnSynch = int(choice)
     
-    def set_synch_master(self, choice):
-        """Set the device as a synch master."""
+    @property
+    def sync_master(self):
+        return bool(self.pdx.SynchMaster)
+    @sync_master.setter
+    def sync_master(self, choice):
+        """Set the device as a sync master."""
         self.pdx.SynchMaster = int(choice)
     
-    def set_sample_rate(self, rate):
+    @property
+    def sample_rate(self):
+        return self.pdx.SamplingRate
+    @sample_rate.setter
+    def sample_rate(self, rate):
         """Set sample rate in Hz"""
         self.pdx.SamplingRate = rate
-        self.sample_rate = self.pdx.SamplingRate
         
-    def set_transmit_length(self, index=3):
+    @property
+    def transmit_length(self):
+        return self.pdx.TransmitLength
+    @transmit_length.setter
+    def transmit_length(self, index=3):
         """Sets transmit length."""
         self.pdx.TransmitLength = index
         
-    def set_sampling_volume(self, index=3):
+    @property
+    def sampling_volume(self):
+        return self.pdx.SamplingVolume
+    @sampling_volume.setter
+    def sampling_volume(self, index=3):
         """Sets sampling volume."""
         self.pdx.SamplingVolume = index
         
-    def set_salinity(self, value=0.0):
+    @property
+    def salinity(self):
+        return self.pdx.Salinity
+    @salinity.setter
+    def salinity(self, value=0.0):
         """Sets salinity in ppt."""
         self.pdx.Salinity = value
         
-    def set_power_level(self, index=0):
-        """Sets the power level according to the index.
+    @property
+    def power_level(self):
+        pl = self.pdx.PowerLevel
+        if pl == 0:
+            return "High"
+        elif pl == 1:
+            return "HighLow"
+        elif pl == 2:
+            return "LowHigh"
+        elif pl == 3: 
+            return "Low"
+        else: return pl
+    @power_level.setter
+    def power_level(self, val):
+        """Sets the power level according to the index or string.
         0 = High
         1 = HighLow
         2 = LowHigh
         3 = Low"""
-        self.pdx.PowerLevel = index
+        if val in [0, 1, 2, 3]:
+            self.pdx.PowerLevel = val
+        elif type(val) is str:
+            if val.lower() == "high":
+                self.pdx.PowerLevel = 0
+            elif val.lower() == "highlow":
+                self.pdx.PowerLevel = 1
+            elif val.lower() == "lowhigh":
+                self.pdx.PowerLevel = 2
+            elif val.lower() == "low":
+                self.pdx.PowerLevel = 3
+        else:
+            raise ValueError("Not a valid power level")
     
-    def is_connected(self):
+    @property
+    def connected(self):
         """Returns a bool indicating connection status."""
-        self.connected = bool(self.pdx.IsConnected())
-        return self.connected
-    
-    def set_vel_range(self, index):
+        return bool(self.pdx.IsConnected())
+        
+    @property
+    def vel_range(self):
+        return self.pdx.VelRange
+    @vel_range.setter
+    def vel_range(self, index):
         """Sets instrument velocity range. Takes an integer index as
         an argument.
         Nominal velocity range should be set to cover the range of the
@@ -205,7 +261,17 @@ class PdControl(object):
             5 = 0.03 m/s"""
         self.pdx.VelRange = index
         
-    def set_coordinate_system(self, coordsys):
+    @property
+    def coordinate_system(self):
+        csi = self.pdx.CoordinateSystem
+        if csi == 0: 
+            return "ENU"
+        elif csi == 1:
+            return "XYZ"
+        elif csi == 2:
+            return "Beam"
+    @coordinate_system.setter
+    def coordinate_system(self, coordsys):
         """Sets instrument coordinate system. Accepts an int or string."""
         if coordsys == "ENU":
             ncs = 0
@@ -249,15 +315,12 @@ class PdControl(object):
         """Stops data collection."""
         self.pdx.Stop()    
     
-    def get_prod_conf(self):
+    @property
+    def prod_conf(self):
         """Returns the hardware configuration structure as a VARIANT array. 
         See the Paradopp system integrators manual for a description of the 
         binary data structures."""
         return self.pdx.GetProdConf()
-    
-    def get_start_on_synch(self):
-        """Returns start on synch option value."""
-        return bool(self.pdx.StartOnSynch)
     
     def get_vel(self, cell, beam):
         """Gets the most recent velocity data for the specified cell and beam
@@ -272,61 +335,30 @@ class PdControl(object):
     def get_var_velocity(self):
         """Gets the most recent velocity data as a variant type array."""
         return self.pdx.GetVarVelocity
-        
-    def get_vel_range(self, instrument="Vectrino", as_float=True):
-        """Returns instrument velocity range. If as_float, velocity range
-        is returned as an instrument dependent float with units (m/s)."""
-        if as_float:
-            return velranges[instrument][self.pdx.VelRange]
-        else:
-            return self.pdx.VelRange
-            
-    def get_power_level(self, as_string=True):
-        """Returns the instrument's power level as a string by default
-        optionally as integer index."""
-        pl = self.pdx.PowerLevel
-        if as_string:
-            if pl == 0:
-                return "High"
-            elif pl == 1:
-                return "HighLow"
-            elif pl == 2:
-                return "LowHigh"
-            elif pl == 3: 
-                return "Low"
-        else: return pl
-        
+
     def get_snr(self, cell, other=1):
         """Gets the most recent SNR data for the specified cell number."""
         return self.pdx.GetSNR(cell, other)
         
-    def get_salinity(self):
-        """Returns salinity value in ppt."""
-        return self.pdx.Salinity
-        
-    def get_sampling_volume_value(self, nSVIndex, nTLIndex):
+    def _sampling_volume_value(self, nSVIndex, nTLIndex):
         """Returns the Sampling Volume corresponding to the Sampling Volume and 
         Transmit Length indices."""
         return self.pdx.SamplingVolumeValue(nSVIndex, nTLIndex)
-        
-    def get_sampling_volume(self, as_float=True):
-        """Returns the device samping volume."""
+    
+    @property
+    def sampling_volume_value(self):
+        """Returns the device samping volume value in m."""
         svi = self.pdx.SamplingVolume
         tli = self.pdx.TransmitLength
-        if as_float:
-            return self.get_sampling_volume_value(svi, tli)
-        else:
-            return svi
-        
-    def get_transmit_length(self, as_float=True):
+        return self._sampling_volume_value(svi, tli)
+
+    @property
+    def transmit_length_value(self):
         """Returns the device transmit length."""
         tli = self.pdx.TransmitLength
-        if as_float:
-            return self.get_transmit_length_value(tli)
-        else:
-            return tli
+        return self._transmit_length_value(tli)
         
-    def get_transmit_length_value(self, index):
+    def _transmit_length_value(self, index):
         """Returns the transmit length value corresponding to the given
         index."""
         return self.pdx.TransmitLengthValue(index)
@@ -340,12 +372,10 @@ class PdControl(object):
         and beam number. Cell and beam numbering start at 1."""
         return self.pdx.GetCorr(cell, beam)
         
-    def get_instrument(self, as_string=True):
+    @property
+    def instrument(self):
         """Returns the instrument type."""
-        if as_string:
-            return instruments[self.pdx.GetInstrument()]
-        else:
-            return self.pdx.GetInstrument()
+        return instruments[self.pdx.GetInstrument()]
     
     def get_data_block(self, hType=1):
         """Returns the most recent measurement data structure as a VARIANT array. 
@@ -353,25 +383,18 @@ class PdControl(object):
         binary data structures."""
         return self.pdx.GetDataBlock(hType)
         
-    def get_vertical_vel_prec(self):
+    @property
+    def vertical_vel_prec(self):
         """Returns the vertical velocity precision."""
         return self.pdx.GetVerticalVelPrec()
     
-    def get_horizontal_vel_prec(self):
+    @property
+    def horizontal_vel_prec(self):
         """Returns the horizontal velocity precision."""
         return self.pdx.GetHorizontalVelPrec()
         
-    def get_coordinate_system(self):
-        """Returns the device coordinate system as a string."""
-        csys = self.pdx.CoordinateSystem
-        if csys == 0:
-            return "ENU"
-        elif csys == 1:
-            return "XYZ"
-        elif csys == 2:
-            return "Beam"
-        
-    def get_error_message(self):
+    @property
+    def last_error_message(self):
         """Gets the most recent error message."""
         return self.pdx.GetErrorMessage()
     
@@ -390,13 +413,15 @@ class PdControl(object):
         else:
             self.state = self.pdx.InquireState()
         return self.state
-    
 
-if __name__ == "__main__":
+def main():
     vec = PdControl()
-    vec.set_transmit_length(3)
-    vec.set_sampling_volume(3)
-    print vec.get_transmit_length()
-    print vec.get_sampling_volume()
-    vec.set_vel_range(2)
-    print vec.get_vel_range()
+    vec.sample_rate = 200
+    vec.transmit_length = 4
+    print vec.pdx.TransmitLength
+    print vec.pdx.SamplingRate
+    vec.power_level = "HIGH"
+    print vec.last_error_message
+    
+if __name__ == "__main__":
+    main()
