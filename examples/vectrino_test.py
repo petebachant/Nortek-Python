@@ -12,21 +12,19 @@ import numpy as np
 
 vec = PdControl()
 
-vec.set_serial_port("COM8")
-vec.set_start_on_synch(False)
-vec.set_synch_master(True)
-vec.set_sample_rate(20)
-vec.set_vel_range(2)
-vec.set_transmit_length(3)
-vec.set_sampling_volume(3)
-vec.set_salinity(0.0)
-vec.set_power_level(0)
+vec.serial_port = "COM8"
+vec.start_on_sync = False
+vec.sync_master = True
+vec.sample_rate = 100
+vec.vel_range = 2
+vec.transmit_length = 3
+vec.sampling_volume = 3
+vec.salinity = 0.0
+vec.power_level = "High"
 vec.connect()
-connected = False
 
 while not vec.connected:
     print "Connecting..."
-    vec.is_connected()
     time.sleep(0.5)    
 print "Connected!"
 
@@ -37,7 +35,6 @@ vec.start()
 
 while vec.state != "Confirmation mode":
     time.sleep(0.2)
-    vec.inquire_state()
 print "Collecting data..."
 
 i = 0
