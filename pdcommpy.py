@@ -406,13 +406,14 @@ class PdControl(object):
         """Returns True if the instrument configuration is valid."""
         return bool(self.pdx.ValidateConfig())
     
-    def inquire_state(self, as_string=True):
+    @property
+    def state(self):
         """Returns the device state. If as_string is false, returns an int."""
-        if as_string:
-            self.state = states[self.pdx.InquireState()]
-        else:
-            self.state = self.pdx.InquireState()
-        return self.state
+        return states[self.pdx.InquireState()]
+        
+    @property
+    def state_index(self):
+        return self.pdx.InquireState()
 
 def main():
     vec = PdControl()
