@@ -19,7 +19,7 @@ Usage
 >>> pdcontrol = PdControl()
 >>> pdcontrol.serial_port = "COM2"
 >>> pdcontrol.state
-Not connected
+'Not connected'
 >>> pdcontrol.sample_rate = 200
 >>> pdcontrol.coordinate_system
 'ENU'
