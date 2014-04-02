@@ -1,7 +1,7 @@
 PdCommPy
 ========
 
-A Python wrapper for Nortek's PdCommATL -- still in its fledgling stages.
+A Python wrapper for Nortek's PdCommATL COM library.
 
 
 Installation
