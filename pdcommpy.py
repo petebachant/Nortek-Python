@@ -8,6 +8,7 @@ To-do:
   * Alphabetize functions
 
 """
+from __future__ import print_function
 import win32com.client as _wc
 import numpy as np
 
@@ -454,11 +455,11 @@ def main():
     vec.sample_rate = 200
     vec.transmit_length = 1.8
     vec.sampling_volume = 7.0
-    print vec.instrument
-    print vec.transmit_length_value
-    print vec.sampling_volume_value
+    print(vec.instrument)
+    print(vec.transmit_length_value)
+    print(vec.sampling_volume_value)
     vec.coordinate_system = "xyz"
-    print vec.coordinate_system
+    print(vec.coordinate_system)
     
 if __name__ == "__main__":
     main()
