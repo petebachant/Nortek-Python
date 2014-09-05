@@ -3,5 +3,6 @@
 *.vno
 *.dat
 *.hdr
-
+MANIFEST
+dist/
 build/lib/pdcommpy.py
