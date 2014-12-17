@@ -4,15 +4,15 @@
 from distutils.core import setup
 
 setup(
-    name='PdCommPy',
+    name='Nortek',
     version='0.0.1',
     author='Pete Bachant',
     author_email='petebachant@gmail.com',
-    py_modules=['pdcommpy'],
+    packages=['nortek'],
     scripts=[],
-    url='https://github.com/petebachant/PdCommPy.git',
-    license='GPL v2',
-    description='Package for working with Nortek instruments.',
+    url='https://github.com/petebachant/Nortek-Python.git',
+    license='MIT',
+    description='Package for working with Nortek instruments and data files.',
     long_description=open('README.md').read(),
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
