@@ -5,7 +5,7 @@ Created on Mon Aug 12 22:59:01 2013
 @author: Pete
 """
 from __future__ import division
-from pdcommpy import PdControl
+from nortek.controls import PdControl
 import time
 import matplotlib.pyplot as plt
 import numpy as np

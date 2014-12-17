@@ -13,7 +13,7 @@ from mainwindow import *
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
-from pdcommpy import PdControl, list_serial_ports
+from nortek.controls import PdControl, list_serial_ports
 
 pd = PdControl()
 
