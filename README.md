@@ -3,7 +3,6 @@ Nortek-Python
 
 A Python package for working with Nortek instruments and data.
 
-
 Installation
 ------------
   * Install Nortek's PdCommATL library (contact Nortek to obtain the necessary installer).
