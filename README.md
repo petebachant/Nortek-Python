@@ -23,3 +23,9 @@ Usage
 'ENU'
 ```
 
+Acknowledgments
+---------------
+
+Thanks to PJ Rusello from Nortek for sharing his code for reading the
+Nortek binary data files. 
+
