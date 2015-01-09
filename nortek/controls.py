@@ -81,7 +81,7 @@ class PdControl(object):
     class PdEvents(object):
         """OnNewData event handler."""
         def __init__(self):
-            self.data = {"t" : np.array([]),
+            self.data = {"time" : np.array([]),
                          "u" : np.array([]),
                          "v" : np.array([]),
                          "w" : np.array([]),
@@ -105,7 +105,7 @@ class PdControl(object):
             self.data["snr_u"] = np.append(self.data["snr_u"], self.snr_u)
             self.data["snr_v"] = np.append(self.data["snr_u"], self.snr_v)
             self.data["snr_w"] = np.append(self.data["snr_u"], self.snr_w)
-            self.data["t"] = np.arange(len(self.data["u"]), dtype=float)\
+            self.data["time"] = np.arange(len(self.data["u"]), dtype=float)\
             /float(self.SamplingRate)
         def OnNewData(self, hType=1):
             self.sample += 1
