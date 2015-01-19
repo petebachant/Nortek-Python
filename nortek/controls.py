@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Mon Aug 12 17:16:04 2013
 
@@ -227,7 +226,33 @@ class PdControl(object):
             self.pdx.SamplingVolume = val
         else:
             raise ValueError("Invalid sampling volume specified")
+    
+    @property
+    def sound_speed_mode(self):
+        """Returns sound speed mode; 0 = measured, 1 = fixed."""
+        return self.pdx.SoundSpeedMode
+    @sound_speed_mode.setter
+    def sound_speed_mode(self, mode):
+        """Sets sound speed mode; 0 or "measured" for measured; 1 or "fixed"
+        for fixed."""
+        if mode == "measured":
+            mode = 0
+        if mode == "fixed":
+            mode = 1
+        self.pdx.SoundSpeedMode = mode
         
+    @property
+    def sound_speed(self):
+        """Returns sound speed in m/s."""
+        return self.pdx.SoundSpeed
+    @sound_speed.setter
+    def sound_speed(self, value=1525.0):
+        """Sets the sound speed in m/s. Default is 1525.0. If this function is
+        called, `sound_speed_mode` will be set to fixed."""
+        if not self.sound_speed_mode:
+            self.sound_speed_mode = 1
+        self.pdx.SoundSpeed = float(value)
+
     @property
     def salinity(self):
         return self.pdx.Salinity
