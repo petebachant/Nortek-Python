@@ -246,7 +246,7 @@ class PdControl(object):
         """Returns sound speed in m/s."""
         return self.pdx.SoundSpeed
     @sound_speed.setter
-    def sound_speed(self, value=1525.0):
+    def sound_speed(self, value):
         """Sets the sound speed in m/s. Default is 1525.0. If this function is
         called, `sound_speed_mode` will be set to fixed."""
         if not self.sound_speed_mode:

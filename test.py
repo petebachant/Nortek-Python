@@ -22,8 +22,10 @@ def test_vectrino_file():
 def test_pdcontrol():
     vec = PdControl()
     print(vec.sound_speed_mode)
+    vec.sound_speed = 1489.0
     print(vec.sound_speed)
     print(vec.salinity)
+    print(vec.sound_speed_mode)
     
 if __name__ == "__main__":
     test_pdcontrol()
